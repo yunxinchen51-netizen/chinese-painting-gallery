@@ -35,6 +35,7 @@ const page = ref('gallery')
 const editMode = ref(false)
 const dragPositions = reactive(JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}'))
 const dragState = reactive({ key: '', startX: 0, startY: 0, originX: 0, originY: 0 })
+const apiBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
 
 function dragStyle(key) {
   const p = dragPositions[key] || { x: 0, y: 0 }
@@ -72,7 +73,7 @@ function persistLayout() {
   const positions = JSON.parse(JSON.stringify(dragPositions))
   // Keep a local copy for instant fallback, while the API is the shared source of truth.
   localStorage.setItem('gallery-layout-positions', JSON.stringify(positions))
-  fetch('/api/layout-positions/', {
+  fetch(`${apiBase}/layout-positions/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ positions }),
@@ -87,7 +88,7 @@ function toggleEditMode() {
 onMounted(() => {
   window.addEventListener('pointermove', moveDrag)
   window.addEventListener('pointerup', endDrag)
-  fetch('/api/layout-positions/')
+  fetch(`${apiBase}/layout-positions/`)
     .then((response) => {
       if (!response.ok) throw new Error('Unable to load shared layout')
       return response.json()
