@@ -9,12 +9,16 @@ from .models import LayoutSettings
 def _with_cors(response):
     origin = os.environ.get('FRONTEND_ORIGIN', '*').rstrip('/')
     response['Access-Control-Allow-Origin'] = origin or '*'
+    response['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    response['Access-Control-Allow-Headers'] = 'Content-Type'
     response['Vary'] = 'Origin'
     return response
 
 @csrf_exempt
 def layout_positions(request):
     """Read or update the shared layout positions."""
+    if request.method == 'OPTIONS':
+        return _with_cors(JsonResponse({}, status=204))
     setting, _ = LayoutSettings.objects.get_or_create(key='gallery-layout-positions')
     if request.method == 'GET':
         return _with_cors(JsonResponse({'positions': setting.positions}))
