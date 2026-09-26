@@ -186,7 +186,18 @@ function backToGallery() {
         <section class="detail-side draggable-part" :style="dragStyle('detail-side')" @pointerdown="startDrag($event, 'detail-side')">
           <img class="side-panel" :src="detailPanel" alt="" />
           <img class="detail-profile" :src="detailProfile" alt="好学的皓皓" />
-          <img class="detail-meta-image" :src="detailMetaAsset" alt="作品信息" />
+          <div class="meta-piece meta-title draggable-part" :style="dragStyle('detail-title')" @pointerdown="startDrag($event, 'detail-title')">
+            <img :src="detailMetaAsset" alt="作品标题" />
+          </div>
+          <div class="meta-piece meta-description draggable-part" :style="dragStyle('detail-description')" @pointerdown="startDrag($event, 'detail-description')">
+            <img :src="detailMetaAsset" alt="作品简介" />
+          </div>
+          <div class="meta-piece meta-tags draggable-part" :style="dragStyle('detail-tags')" @pointerdown="startDrag($event, 'detail-tags')">
+            <img :src="detailMetaAsset" alt="作品标签" />
+          </div>
+          <div class="meta-piece meta-location draggable-part" :style="dragStyle('detail-location')" @pointerdown="startDrag($event, 'detail-location')">
+            <img :src="detailMetaAsset" alt="作品地点" />
+          </div>
           <img class="comments-label-image" :src="commentsLabel" alt="评论" />
           <div class="comment-input">写下你的点评吧！</div>
           <div class="comment-list" aria-label="评论区">
