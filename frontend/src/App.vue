@@ -36,10 +36,13 @@ const editMode = ref(false)
 const dragPositions = reactive(JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}'))
 const dragState = reactive({ key: '', startX: 0, startY: 0, originX: 0, originY: 0 })
 const apiBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
+const viewportWidth = ref(window.innerWidth)
+const layoutBaseWidth = ref(Number(dragPositions.__viewportWidth) || window.innerWidth)
 
 function dragStyle(key) {
   const p = dragPositions[key] || { x: 0, y: 0 }
-  return { '--drag-x': `${p.x}px`, '--drag-y': `${p.y}px` }
+  const scale = viewportWidth.value / layoutBaseWidth.value
+  return { '--drag-x': `${p.x * scale}px`, '--drag-y': `${p.y * scale}px` }
 }
 
 function startDrag(event, key) {
@@ -50,16 +53,18 @@ function startDrag(event, key) {
   dragState.key = key
   dragState.startX = event.clientX
   dragState.startY = event.clientY
+  const scale = viewportWidth.value / layoutBaseWidth.value
   dragState.originX = p.x
   dragState.originY = p.y
+  dragState.scale = scale
   event.currentTarget.setPointerCapture?.(event.pointerId)
 }
 
 function moveDrag(event) {
   if (!editMode.value || !dragState.key) return
   dragPositions[dragState.key] = {
-    x: Math.round(dragState.originX + event.clientX - dragState.startX),
-    y: Math.round(dragState.originY + event.clientY - dragState.startY),
+    x: Math.round(dragState.originX + (event.clientX - dragState.startX) / dragState.scale),
+    y: Math.round(dragState.originY + (event.clientY - dragState.startY) / dragState.scale),
   }
 }
 
@@ -71,6 +76,8 @@ function endDrag() {
 
 function persistLayout() {
   const positions = JSON.parse(JSON.stringify(dragPositions))
+  positions.__viewportWidth = viewportWidth.value
+  layoutBaseWidth.value = viewportWidth.value
   // Keep a local copy for instant fallback, while the API is the shared source of truth.
   localStorage.setItem('gallery-layout-positions', JSON.stringify(positions))
   fetch(`${apiBase}/layout-positions/`, {
@@ -88,6 +95,7 @@ function toggleEditMode() {
 onMounted(() => {
   window.addEventListener('pointermove', moveDrag)
   window.addEventListener('pointerup', endDrag)
+  window.addEventListener('resize', () => { viewportWidth.value = window.innerWidth })
   fetch(`${apiBase}/layout-positions/`)
     .then((response) => {
       if (!response.ok) throw new Error('Unable to load shared layout')
@@ -95,6 +103,7 @@ onMounted(() => {
     })
     .then(({ positions }) => {
       if (!positions || typeof positions !== 'object') return
+      layoutBaseWidth.value = Number(positions.__viewportWidth) || window.innerWidth
       const localPositions = JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}')
       // One-time migration: preserve an existing local layout when the server is still empty.
       if (Object.keys(positions).length === 0 && Object.keys(localPositions).length > 0) {
