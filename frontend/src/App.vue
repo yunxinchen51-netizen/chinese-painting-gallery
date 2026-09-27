@@ -180,15 +180,9 @@ function backToGallery() {
           <img class="paper-frame" :src="detailPaper" alt="" />
           <img class="detail-art" :src="oneRain" alt="春山烟雨图" />
           <img class="original-badge draggable-part" :style="dragStyle('original-badge')" @pointerdown="startDrag($event, 'original-badge')" :src="originalBadge" alt="原创作品" />
-          <div class="stats-piece stats-likes draggable-part" :style="dragStyle('stats-likes')" @pointerdown="startDrag($event, 'stats-likes')">
-            <img :src="artworkStats" alt="点赞 317" />
-          </div>
-          <div class="stats-piece stats-comments draggable-part" :style="dragStyle('stats-comments')" @pointerdown="startDrag($event, 'stats-comments')">
-            <img :src="artworkStats" alt="评论 32" />
-          </div>
-          <div class="stats-piece stats-saves draggable-part" :style="dragStyle('stats-saves')" @pointerdown="startDrag($event, 'stats-saves')">
-            <img :src="artworkStats" alt="收藏 9" />
-          </div>
+          <div class="stats-piece stats-likes draggable-part" :style="dragStyle('stats-likes')" @pointerdown="startDrag($event, 'stats-likes')" role="img" aria-label="点赞 317"></div>
+          <div class="stats-piece stats-comments draggable-part" :style="dragStyle('stats-comments')" @pointerdown="startDrag($event, 'stats-comments')" role="img" aria-label="评论 32"></div>
+          <div class="stats-piece stats-saves draggable-part" :style="dragStyle('stats-saves')" @pointerdown="startDrag($event, 'stats-saves')" role="img" aria-label="收藏 9"></div>
           <img class="roller roller-bottom" :src="rollerBottom" alt="" />
         </div>
         <section class="detail-side draggable-part" :style="dragStyle('detail-side')" @pointerdown="startDrag($event, 'detail-side')">
