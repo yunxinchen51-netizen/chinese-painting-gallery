@@ -95,6 +95,42 @@ button { border: 0; cursor: pointer; }
   top: 85.65%;
   width: 40.5%;
 }
+.stats-piece {
+  position: absolute;
+  top: 85.65%;
+  height: 4.7%;
+  overflow: hidden;
+  z-index: 4;
+}
+.stats-piece img {
+  position: absolute;
+  top: 0;
+  width: 285%;
+  max-width: none;
+  height: 100%;
+}
+.stats-likes {
+  left: 39.5%;
+  width: 14.2%;
+}
+.stats-likes img {
+  left: 0;
+}
+.stats-comments {
+  left: 56.5%;
+  width: 14.2%;
+}
+.stats-comments img {
+  left: -120%;
+}
+.stats-saves {
+  left: 74.3%;
+  width: 13.2%;
+}
+.stats-saves img {
+  width: 307%;
+  left: -263%;
+}
 .detail-side { left: 55%; top: 2.04%; width: 46%; height: 100%; }
 .detail-side { height: 100%; }
 .side-panel { top: -5.54%; left: 0; width: 100%; height: 105.54%; }
