@@ -204,7 +204,6 @@ function backToGallery() {
           <div class="comment-input">写下你的点评吧！</div>
           <div class="comment-list" aria-label="评论区">
             <img class="comments-image" :src="commentsAsset" alt="评论区" />
-            <div class="comment-scroll-spacer" aria-hidden="true"></div>
           </div>
         </section>
       </section>
