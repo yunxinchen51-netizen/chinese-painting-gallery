@@ -121,7 +121,15 @@ button { border: 0; cursor: pointer; }
 .detail-meta-image { display: none; }
 .comments-label-image { left: 11.11%; top: 43.7%; width: 6.28%; height: auto; }
 .detail-side .comment-input { left: 10.74%; top: 47.5%; width: 78.64%; height: 4.9%; }
-.detail-side .comment-list { left: 10.74%; top: 53.8%; width: 78.64%; height: 40.6%; }
+.detail-side .comment-list {
+  left: 10.74%;
+  top: 53.8%;
+  width: 78.64%;
+  height: 40.6%;
+  background: #f4f1e7;
+  border-radius: 6px;
+  isolation: isolate;
+}
 .comments-image { width: 100%; height: auto; }
 
 /* 本轮细调：保持右侧内容层原位，只移动底图；左侧画卷与画布保持对称 */
