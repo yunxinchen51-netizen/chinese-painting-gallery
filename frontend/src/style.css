@@ -44,15 +44,12 @@ button { border: 0; cursor: pointer; }
 .side-panel { position: absolute; inset: 0; width: 808px; height: 840px; object-fit: fill; }
 .detail-profile { position: absolute; left: 58px; top: 27px; width: 268px; height: 89px; }
 .detail-meta-image { position: absolute; left: 86px; top: 131px; width: 638px; height: 265px; }
-.meta-piece { position: absolute; left: 10.63%; width: 70.34%; overflow: hidden; z-index: 1; transform: translateY(1.4vw); }
-.meta-piece img { position: absolute; left: 0; width: 100%; max-width: none; height: auto; }
-.meta-title { top: 13.88%; height: 28.7%; }
-.meta-description { top: 25.5%; height: 40.8%; }
-.meta-description img { top: -28.7%; }
-.meta-tags { top: 40.1%; height: 24%; }
-.meta-tags img { top: -69.4%; }
-.meta-location { top: 40.1%; left: 49%; width: 32%; height: 24%; }
-.meta-location img { left: -33%; top: -69.4%; width: 142%; }
+.meta-piece { position: absolute; overflow: visible; z-index: 1; transform: translateY(1.4vw); }
+.meta-piece img { display: block; width: 100%; height: auto; }
+.meta-title { left: 15.94%; top: 13.88%; width: 56.4%; }
+.meta-description { left: 10.63%; top: 25.5%; width: 70.34%; }
+.meta-tags { left: 10.63%; top: 40.1%; width: 31.55%; }
+.meta-location { left: 70.7%; top: 40.1%; width: 10.8%; }
 .comments-label-image { position: absolute; left: 90px; top: 413px; width: 57px; height: 32px; }
 .detail-side .comment-input { position: absolute; left: 87px; top: 449px; width: 637px; height: 47px; z-index: 2; }
 .detail-side .comment-list { position: absolute; left: 87px; top: 508px; width: 637px; height: 390px; margin: 0; padding: 0; overflow-y: auto; z-index: 2; background: transparent; }
@@ -97,30 +94,25 @@ button { border: 0; cursor: pointer; }
 .stats-piece {
   position: absolute;
   top: 85.65%;
-  height: 4.7%;
-  overflow: hidden;
+  height: auto;
   z-index: 4;
-  background-image: url('./assets/figma/Container.png');
-  background-repeat: no-repeat;
-  background-size: auto 100%;
+}
+.stats-piece img {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 .stats-likes {
   left: 39.5%;
-  width: 14.2%;
-  background-position: left top;
-  background-size: 285% 100%;
+  width: 12.2%;
 }
 .stats-comments {
-  left: 53.7%;
-  width: 15.9%;
-  background-position: 57.8% top;
-  background-size: 255% 100%;
+  left: 54.3%;
+  width: 11.9%;
 }
 .stats-saves {
-  left: 72.7%;
-  width: 10.4%;
-  background-position: right top;
-  background-size: 390% 100%;
+  left: 74.4%;
+  width: 9.9%;
 }
 .detail-side { left: 55%; top: 2.04%; width: 46%; height: 100%; }
 .detail-side { height: 100%; }

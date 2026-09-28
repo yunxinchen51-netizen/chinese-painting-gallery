@@ -19,7 +19,10 @@ import publishedBadge from './assets/figma/Group 5.png'
 import profileBadge from './assets/figma/Group 237494.png'
 import newWorkBadge from './assets/figma/Group 9246.png'
 import detailProfile from './assets/figma/Group 237489.png'
-import detailMetaAsset from './assets/figma/Group 237493.png'
+import detailMetaTitle from './assets/figma/detail-meta-title.png'
+import detailMetaDescription from './assets/figma/detail-meta-description.png'
+import detailMetaTags from './assets/figma/detail-meta-tags.png'
+import detailMetaLocation from './assets/figma/detail-meta-location.png'
 import aiCat from './assets/figma/Group 237486.png'
 import aiLabel from './assets/figma/AI助手.png'
 import detailPanel from './assets/figma/Group 9206.png'
@@ -27,13 +30,18 @@ import detailPaper from './assets/figma/Mask group.png'
 import rollerTop from './assets/figma/image 419.png'
 import rollerBottom from './assets/figma/image 418.png'
 import originalBadge from './assets/figma/Group 237561.png'
-import artworkStats from './assets/figma/Container.png'
+import statsLikes from './assets/figma/stats-likes.png'
+import statsComments from './assets/figma/stats-comments.png'
+import statsSaves from './assets/figma/stats-saves.png'
 import commentsAsset from './assets/figma/评论区.png'
 import commentsLabel from './assets/figma/评论.png'
 
 const page = ref('gallery')
 const editMode = ref(false)
 const dragPositions = reactive(JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}'))
+;['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves'].forEach((key) => {
+  delete dragPositions[key]
+})
 const dragState = reactive({ key: '', startX: 0, startY: 0, originX: 0, originY: 0 })
 const apiBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
 const viewportWidth = ref(window.innerWidth)
@@ -113,7 +121,11 @@ onMounted(() => {
       }
       Object.keys(dragPositions).forEach((key) => delete dragPositions[key])
       Object.assign(dragPositions, positions)
-      localStorage.setItem('gallery-layout-positions', JSON.stringify(positions))
+      // Reset the recently split image pieces once so old clipped coordinates cannot leak into the new layers.
+      ;['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves'].forEach((key) => {
+        delete dragPositions[key]
+      })
+      localStorage.setItem('gallery-layout-positions', JSON.stringify(dragPositions))
     })
     .catch(() => {})
 })
@@ -180,25 +192,25 @@ function backToGallery() {
           <img class="paper-frame" :src="detailPaper" alt="" />
           <img class="detail-art" :src="oneRain" alt="春山烟雨图" />
           <img class="original-badge draggable-part" :style="dragStyle('original-badge')" @pointerdown="startDrag($event, 'original-badge')" :src="originalBadge" alt="原创作品" />
-          <div class="stats-piece stats-likes draggable-part" :style="dragStyle('stats-likes')" @pointerdown="startDrag($event, 'stats-likes')" role="img" aria-label="点赞 317"></div>
-          <div class="stats-piece stats-comments draggable-part" :style="dragStyle('stats-comments')" @pointerdown="startDrag($event, 'stats-comments')" role="img" aria-label="评论 32"></div>
-          <div class="stats-piece stats-saves draggable-part" :style="dragStyle('stats-saves')" @pointerdown="startDrag($event, 'stats-saves')" role="img" aria-label="收藏 9"></div>
+          <div class="stats-piece stats-likes draggable-part" :style="dragStyle('stats-likes')" @pointerdown="startDrag($event, 'stats-likes')"><img :src="statsLikes" alt="点赞 317" /></div>
+          <div class="stats-piece stats-comments draggable-part" :style="dragStyle('stats-comments')" @pointerdown="startDrag($event, 'stats-comments')"><img :src="statsComments" alt="评论 32" /></div>
+          <div class="stats-piece stats-saves draggable-part" :style="dragStyle('stats-saves')" @pointerdown="startDrag($event, 'stats-saves')"><img :src="statsSaves" alt="收藏 9" /></div>
           <img class="roller roller-bottom" :src="rollerBottom" alt="" />
         </div>
         <section class="detail-side draggable-part" :style="dragStyle('detail-side')" @pointerdown="startDrag($event, 'detail-side')">
           <img class="side-panel" :src="detailPanel" alt="" />
           <img class="detail-profile" :src="detailProfile" alt="好学的皓皓" />
           <div class="meta-piece meta-title draggable-part" :style="dragStyle('detail-title')" @pointerdown="startDrag($event, 'detail-title')">
-            <img :src="detailMetaAsset" alt="作品标题" />
+            <img :src="detailMetaTitle" alt="作品标题" />
           </div>
           <div class="meta-piece meta-description draggable-part" :style="dragStyle('detail-description')" @pointerdown="startDrag($event, 'detail-description')">
-            <img :src="detailMetaAsset" alt="作品简介" />
+            <img :src="detailMetaDescription" alt="作品简介" />
           </div>
           <div class="meta-piece meta-tags draggable-part" :style="dragStyle('detail-tags')" @pointerdown="startDrag($event, 'detail-tags')">
-            <img :src="detailMetaAsset" alt="作品标签" />
+            <img :src="detailMetaTags" alt="作品标签" />
           </div>
           <div class="meta-piece meta-location draggable-part" :style="dragStyle('detail-location')" @pointerdown="startDrag($event, 'detail-location')">
-            <img :src="detailMetaAsset" alt="作品地点" />
+            <img :src="detailMetaLocation" alt="作品地点" />
           </div>
           <img class="comments-label-image" :src="commentsLabel" alt="评论" />
           <div class="comment-input">写下你的点评吧！</div>
