@@ -212,7 +212,6 @@ button { border: 0; cursor: pointer; }
   box-shadow: 0 3px 10px #4c6b6b33;
 }
 .draggable-part {
-  position: relative;
   translate: var(--drag-x, 0) var(--drag-y, 0);
 }
 .layout-editing .draggable-part {
