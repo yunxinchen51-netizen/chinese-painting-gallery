@@ -175,6 +175,81 @@ button { border: 0; cursor: pointer; }
   transform: none;
 }
 
+/* 评论区使用真实卡片列表：容器随页面尺寸伸缩，单条评论保持自身高度 */
+.detail-side .comment-list {
+  height: clamp(260px, 20.3vw, 390px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 8px 10px 0;
+  box-sizing: border-box;
+  scrollbar-color: #849b91 transparent;
+  scrollbar-width: thin;
+}
+.comment-card {
+  display: block;
+  flex: 0 0 auto;
+  min-height: 0;
+  margin: 0 0 10px;
+  padding: clamp(12px, .75vw, 15px) clamp(12px, .7vw, 14px) clamp(10px, .6vw, 12px);
+  border-radius: 12px;
+  background: #fffdf6;
+  box-sizing: border-box;
+}
+.comment-card-main {
+  display: grid;
+  grid-template-columns: clamp(28px, 1.7vw, 34px) minmax(0, 1fr);
+  gap: clamp(9px, .7vw, 14px);
+  align-items: start;
+}
+.comment-card .comment-avatar {
+  width: clamp(28px, 1.7vw, 34px);
+  height: clamp(28px, 1.7vw, 34px);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #ecebe4;
+  font-size: clamp(13px, .8vw, 16px);
+}
+.comment-card p {
+  margin: 0;
+  color: #5d5a53;
+  font-size: clamp(14px, .9vw, 18px);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.comment-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(8px, .55vw, 11px);
+}
+.comment-stars {
+  color: #a6321c;
+  font-size: clamp(17px, 1.25vw, 24px);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+.comment-card .comment-like {
+  color: #a6321c;
+  font-family: sans-serif;
+  font-size: clamp(13px, .8vw, 16px);
+  white-space: nowrap;
+}
+.comments-image { display: none; }
+
+@media (max-width: 900px) {
+  .detail-side .comment-list {
+    height: 260px;
+    padding-right: 6px;
+  }
+  .comment-card {
+    padding: 12px;
+  }
+  .comment-card p {
+    font-size: 14px;
+  }
+}
+
 /* 画廊顶部分类按钮：整体左移、缩小间距，第三项再略微下沉 */
 .gallery-page .tabs {
   gap: 20px;

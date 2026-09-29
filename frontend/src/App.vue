@@ -33,7 +33,6 @@ import originalBadge from './assets/figma/Group 237561.png'
 import statsLikes from './assets/figma/stats-likes.png'
 import statsComments from './assets/figma/stats-comments.png'
 import statsSaves from './assets/figma/stats-saves.png'
-import commentsAsset from './assets/figma/评论区.png'
 import commentsLabel from './assets/figma/评论.png'
 
 const page = ref('gallery')
@@ -219,7 +218,16 @@ function backToGallery() {
           <img class="comments-label-image" :src="commentsLabel" alt="评论" />
           <div class="comment-input">写下你的点评吧！</div>
           <div class="comment-list" aria-label="评论区">
-            <img class="comments-image" :src="commentsAsset" alt="评论区" />
+            <article v-for="comment in comments" :key="comment.text" class="comment-card">
+              <div class="comment-card-main">
+                <div class="comment-avatar">👤</div>
+                <p>{{ comment.text }}</p>
+              </div>
+              <div class="comment-card-footer">
+                <span class="comment-stars" aria-label="5 星">★★★★★</span>
+                <span class="comment-like">👍 {{ comment.likes }}</span>
+              </div>
+            </article>
           </div>
         </section>
       </section>
