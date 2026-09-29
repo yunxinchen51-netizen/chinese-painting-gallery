@@ -59,15 +59,15 @@ button { border: 0; cursor: pointer; }
 @media (max-width: 560px) { .gallery-toolbar { display: block; }.gallery-categories { margin-top: 15px; }.card-grid { grid-template-columns: 1fr; }.work-card { grid-template-columns: 48% 1fr; min-height: 180px; }.work-card .painting { height: 100%; }.search { width: 42px; padding: 8px; }.search input { display: none; }.brand { min-width: auto; }.gallery-tabs { gap: 12px; }.gallery-tabs button { font-size: 18px; }.gallery-tabs span { font-size: 11px; }.gallery-categories { gap: 13px; }.gallery-categories button { font-size: 12px; } }
 
 /* 详情页按 1920×1080 设计稿比例缩放，避免小窗口出现横向错位 */
-.detail-page { min-height: 56.25vw; }
-.detail-page .detail-header { height: 6.4vw; padding: 0 1.5vw; }
+.detail-page { min-height: max(100vh, min(56.25vw, 1080px)); }
+.detail-page .detail-header { height: min(6.4vw, 123px); padding: 0 min(1.5vw, 29px); }
 .detail-header .back { gap: 1.3vw; }
 .detail-header .back img { width: 3.75vw; height: 3.75vw; }
 .detail-header .back span { font-size: 2.2vw; }
 .detail-tools { align-items: center; justify-content: center; flex-direction: column-reverse; gap: 0; }
 .detail-tools img:first-child { width: 9vw; transform: translateY(-.4vw); }
 .detail-tools img:last-child { width: 8.5vw; transform: translateY(3vw); }
-.detail-page .detail-content { width: 100%; min-height: 49.85vw; height: 49.85vw; }
+.detail-page .detail-content { width: 100%; min-height: min(49.85vw, 957px); height: min(49.85vw, 957px); }
 .detail-left { left: 0%; top: 2.04%; width: 54%; height: 83.33%; }
 .detail-left .paper-frame { left: 4.08%; top: 5.44%; width: 89.8%; height: 97.4%; }
 .detail-left .detail-art { left: 11.02%; top: 11.55%; width: 75.72%; height: 72.55%; }
@@ -151,10 +151,10 @@ button { border: 0; cursor: pointer; }
 .detail-tools {
   position: relative;
   z-index: 5;
-  width: 11vw;
-  height: 6.4vw;
-  flex: 0 0 11vw;
-  margin-right: 1.4vw;
+  width: min(11vw, 211px);
+  height: min(6.4vw, 123px);
+  flex: 0 0 min(11vw, 211px);
+  margin-right: min(1.4vw, 27px);
   overflow: visible;
 }
 .detail-tools img {
@@ -165,13 +165,13 @@ button { border: 0; cursor: pointer; }
   object-fit: contain;
 }
 .detail-tools img:first-child {
-  width: 11vw;
-  top: -0.15vw;
+  width: min(11vw, 211px);
+  top: min(-0.15vw, -3px);
   transform: none;
 }
 .detail-tools img:last-child {
-  width: 10vw;
-  top: 3.35vw;
+  width: min(10vw, 192px);
+  top: min(3.35vw, 64px);
   transform: none;
 }
 

@@ -43,12 +43,14 @@ const splitKeys = ['detail-title', 'detail-description', 'detail-tags', 'detail-
 const dragPositions = reactive(JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}'))
 const dragState = reactive({ key: '', startX: 0, startY: 0, originX: 0, originY: 0 })
 const apiBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
-const viewportWidth = ref(window.innerWidth)
-const layoutBaseWidth = ref(Number(dragPositions.__viewportWidth) || window.innerWidth)
+const designWidth = 1920
+const getCanvasWidth = () => Math.min(window.innerWidth, designWidth)
+const canvasWidth = ref(getCanvasWidth())
+const layoutBaseWidth = ref(Number(dragPositions.__viewportWidth) || canvasWidth.value)
 
 function dragStyle(key) {
   const p = dragPositions[key] || { x: 0, y: 0 }
-  const scale = viewportWidth.value / layoutBaseWidth.value
+  const scale = canvasWidth.value / layoutBaseWidth.value
   return { '--drag-x': `${p.x * scale}px`, '--drag-y': `${p.y * scale}px` }
 }
 
@@ -60,7 +62,7 @@ function startDrag(event, key) {
   dragState.key = key
   dragState.startX = event.clientX
   dragState.startY = event.clientY
-  const scale = viewportWidth.value / layoutBaseWidth.value
+  const scale = canvasWidth.value / layoutBaseWidth.value
   dragState.originX = p.x
   dragState.originY = p.y
   dragState.scale = scale
@@ -83,9 +85,9 @@ function endDrag() {
 
 function persistLayout() {
   const positions = JSON.parse(JSON.stringify(dragPositions))
-  positions.__viewportWidth = viewportWidth.value
+  positions.__viewportWidth = canvasWidth.value
   positions.__layoutVersion = layoutVersion
-  layoutBaseWidth.value = viewportWidth.value
+  layoutBaseWidth.value = canvasWidth.value
   // Keep a local copy for instant fallback, while the API is the shared source of truth.
   localStorage.setItem('gallery-layout-positions', JSON.stringify(positions))
   fetch(`${apiBase}/layout-positions/`, {
@@ -103,7 +105,7 @@ function toggleEditMode() {
 onMounted(() => {
   window.addEventListener('pointermove', moveDrag)
   window.addEventListener('pointerup', endDrag)
-  window.addEventListener('resize', () => { viewportWidth.value = window.innerWidth })
+  window.addEventListener('resize', () => { canvasWidth.value = getCanvasWidth() })
   fetch(`${apiBase}/layout-positions/`)
     .then((response) => {
       if (!response.ok) throw new Error('Unable to load shared layout')
@@ -116,7 +118,7 @@ onMounted(() => {
         splitKeys.forEach((key) => delete positions[key])
         positions.__layoutVersion = layoutVersion
       }
-      layoutBaseWidth.value = Number(positions.__viewportWidth) || window.innerWidth
+      layoutBaseWidth.value = Math.min(Number(positions.__viewportWidth) || canvasWidth.value, designWidth)
       const localPositions = JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}')
       // One-time migration: preserve an existing local layout when the server is still empty.
       if (Object.keys(positions).length === 0 && Object.keys(localPositions).length > 0) {
