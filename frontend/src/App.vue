@@ -38,10 +38,9 @@ import commentsLabel from './assets/figma/评论.png'
 
 const page = ref('gallery')
 const editMode = ref(false)
+const layoutVersion = 2
+const splitKeys = ['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves']
 const dragPositions = reactive(JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}'))
-;['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves'].forEach((key) => {
-  delete dragPositions[key]
-})
 const dragState = reactive({ key: '', startX: 0, startY: 0, originX: 0, originY: 0 })
 const apiBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
 const viewportWidth = ref(window.innerWidth)
@@ -85,6 +84,7 @@ function endDrag() {
 function persistLayout() {
   const positions = JSON.parse(JSON.stringify(dragPositions))
   positions.__viewportWidth = viewportWidth.value
+  positions.__layoutVersion = layoutVersion
   layoutBaseWidth.value = viewportWidth.value
   // Keep a local copy for instant fallback, while the API is the shared source of truth.
   localStorage.setItem('gallery-layout-positions', JSON.stringify(positions))
@@ -111,6 +111,11 @@ onMounted(() => {
     })
     .then(({ positions }) => {
       if (!positions || typeof positions !== 'object') return
+      const needsReset = positions.__layoutVersion !== layoutVersion
+      if (needsReset) {
+        splitKeys.forEach((key) => delete positions[key])
+        positions.__layoutVersion = layoutVersion
+      }
       layoutBaseWidth.value = Number(positions.__viewportWidth) || window.innerWidth
       const localPositions = JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}')
       // One-time migration: preserve an existing local layout when the server is still empty.
@@ -121,11 +126,8 @@ onMounted(() => {
       }
       Object.keys(dragPositions).forEach((key) => delete dragPositions[key])
       Object.assign(dragPositions, positions)
-      // Reset the recently split image pieces once so old clipped coordinates cannot leak into the new layers.
-      ;['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves'].forEach((key) => {
-        delete dragPositions[key]
-      })
       localStorage.setItem('gallery-layout-positions', JSON.stringify(dragPositions))
+      if (needsReset) persistLayout()
     })
     .catch(() => {})
 })
