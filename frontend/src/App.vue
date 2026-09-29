@@ -34,6 +34,7 @@ import statsLikes from './assets/figma/stats-likes.png'
 import statsComments from './assets/figma/stats-comments.png'
 import statsSaves from './assets/figma/stats-saves.png'
 import commentsLabel from './assets/figma/评论.png'
+import commentLikeIcon from './assets/figma/comment-like.png'
 
 const page = ref('gallery')
 const editMode = ref(false)
@@ -225,7 +226,7 @@ function backToGallery() {
               </div>
               <div class="comment-card-footer">
                 <span class="comment-stars" aria-label="5 星">★★★★★</span>
-                <span class="comment-like">👍 {{ comment.likes }}</span>
+                <span class="comment-like"><img :src="commentLikeIcon" alt="" />{{ comment.likes }}</span>
               </div>
             </article>
           </div>
