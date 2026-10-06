@@ -123,7 +123,14 @@ button { border: 0; cursor: pointer; }
   border-radius: 3.5%;
 }
 .detail-side { height: 100%; }
-.side-panel { top: -5.54%; left: 0; width: 100%; height: 105.54%; }
+.side-panel {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 0;
+}
 .detail-profile { left: 7.16%; top: 2.86%; width: 29.55%; height: auto; }
 .detail-meta-image { display: none; }
 .comments-label-image { left: 11.11%; top: 43.7%; width: 6.28%; height: auto; }
@@ -139,8 +146,7 @@ button { border: 0; cursor: pointer; }
 }
 .comments-image { width: 100%; height: auto; }
 
-/* 本轮细调：保持右侧内容层原位，只移动底图；左侧画卷与画布保持对称 */
-.side-panel { top: -2.2%; }
+/* 本轮细调：保持右侧内容层原位；左侧画卷与画布保持对称 */
 .detail-left { left: -1.2%; width: 55%; height: 84.5%; }
 .detail-tools img:first-child { width: 10vw; transform: translateY(-.2vw); }
 .detail-tools img:last-child { width: 9.5vw; transform: translateY(1.4vw); }
@@ -184,7 +190,7 @@ button { border: 0; cursor: pointer; }
 
 /* 评论区使用真实卡片列表：容器随页面尺寸伸缩，单条评论保持自身高度 */
 .detail-side .comment-list {
-  height: clamp(260px, 20.3vw, 390px);
+  height: clamp(260px, 39.6%, 390px);
   overflow-y: auto;
   overflow-x: hidden;
   padding: 0 8px 10px 0;
