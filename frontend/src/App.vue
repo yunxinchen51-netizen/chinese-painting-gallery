@@ -35,8 +35,17 @@ import statsComments from './assets/figma/stats-comments.png'
 import statsSaves from './assets/figma/stats-saves.png'
 import commentsLabel from './assets/figma/评论.png'
 import commentLikeIcon from './assets/figma/comment-like.png'
+import createBackground from './assets/create/703381535b14b0b99bac1dcb50cc3a8 1.png'
+import createPanel from './assets/create/Group 237554.png'
+import createCat from './assets/create/Group 237486.png'
+import createAiLabel from './assets/create/AI助手.png'
+import createBack from './assets/create/image 238.png'
+import createUpload from './assets/create/Group 237562.png'
+import createPublish from './assets/create/发布作品.png'
 
 const page = ref('gallery')
+const createForm = reactive({ title: '', description: '', location: '', statement: '', tags: [] })
+const selectedImage = ref('')
 const editMode = ref(false)
 const layoutVersion = 2
 const splitKeys = ['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves']
@@ -158,6 +167,28 @@ function backToGallery() {
   page.value = 'gallery'
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+function openCreate() {
+  page.value = 'create'
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function backFromCreate() {
+  page.value = 'gallery'
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function toggleCreateTag(tag) {
+  createForm.tags = createForm.tags.includes(tag)
+    ? createForm.tags.filter((item) => item !== tag)
+    : [...createForm.tags, tag]
+}
+
+function chooseImage(event) {
+  const file = event.target.files?.[0]
+  if (!file) return
+  selectedImage.value = URL.createObjectURL(file)
+}
 </script>
 
 <template>
@@ -181,10 +212,36 @@ function backToGallery() {
         </button>
       </section>
 
-      <button class="new-work"><img :src="newWorkBadge" alt="新建画作" /></button>
+      <button class="new-work" @click="openCreate"><img :src="newWorkBadge" alt="新建画作" /></button>
     </main>
 
-    <main v-else key="detail" class="figma-page detail-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${detailBackground})` }">
+    <main v-else-if="page === 'create'" key="create" class="figma-page create-page" :style="{ backgroundImage: `url(${createBackground})` }">
+      <header class="create-header">
+        <button class="create-back" @click="backFromCreate"><img :src="createBack" alt="返回" /><span>新建画作</span></button>
+        <div class="create-ai"><img :src="createCat" alt="AI助手" /><img :src="createAiLabel" alt="AI助手" /></div>
+      </header>
+      <section class="create-content">
+        <div class="create-panel-wrap">
+          <img class="create-panel" :src="createPanel" alt="新建画作表单" />
+          <input v-model="createForm.title" class="create-field create-title" aria-label="标题" placeholder="" />
+          <textarea v-model="createForm.description" class="create-field create-description" aria-label="正文描述" placeholder="创作意图/色彩技巧运用..." />
+          <input v-model="createForm.location" class="create-field create-location" aria-label="标记地点" />
+          <div class="create-tags" aria-label="添加标签">
+            <button v-for="tag in ['山水','花鸟','人物','写意']" :key="tag" :class="{ selected: createForm.tags.includes(tag) }" @click="toggleCreateTag(tag)">{{ tag }}</button>
+          </div>
+          <input v-model="createForm.statement" class="create-field create-statement" aria-label="自主声明" />
+          <label class="create-upload" :class="{ 'has-image': selectedImage }">
+            <img v-if="selectedImage" :src="selectedImage" alt="已选择的作品" />
+            <img v-else :src="createUpload" alt="添加作品图片" />
+            <input type="file" accept="image/*" @change="chooseImage" />
+          </label>
+          <button class="create-save" @click="backFromCreate">保存</button>
+          <button class="create-publish" @click="backFromCreate"><img :src="createPublish" alt="发布作品" /></button>
+        </div>
+      </section>
+    </main>
+
+    <main v-else-if="page === 'detail'" key="detail" class="figma-page detail-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${detailBackground})` }">
       <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '完成调整' : '调整布局' }}</button>
       <header class="figma-header detail-header">
         <button class="back" @click="backToGallery"><img :src="galleryBack" alt="返回" /><span>春山烟雨图</span></button>
