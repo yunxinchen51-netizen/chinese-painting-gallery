@@ -259,19 +259,27 @@ button { border: 0; cursor: pointer; }
 .comments-image { display: none; }
 
 @media (max-width: 900px) {
+  /* The detail page becomes a normal document on narrow screens so the
+     stacked panel can grow and the browser can scroll to all of its content. */
+  .detail-page {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
   .detail-page .detail-content {
     width: 100%;
     height: auto;
     min-height: 0;
     padding: 0 3vw 8vw;
     box-sizing: border-box;
+    overflow: visible;
   }
   .detail-page .detail-left {
     position: relative;
     left: auto;
     top: auto;
     width: 100%;
-    height: 52vw;
+    height: min(52vw, 620px);
     margin: 0 auto 4vw;
   }
   .detail-page .detail-side {
@@ -279,7 +287,7 @@ button { border: 0; cursor: pointer; }
     left: auto;
     top: auto;
     width: 100%;
-    height: max(720px, 205vw);
+    height: clamp(760px, 100vw, 980px);
     margin: 0 auto;
   }
   .detail-page .side-panel {
