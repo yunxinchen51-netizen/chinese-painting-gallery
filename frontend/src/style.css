@@ -119,8 +119,7 @@ button { border: 0; cursor: pointer; }
   top: 2.04%;
   width: 46%;
   height: 100%;
-  background: #f4f1e7;
-  border-radius: 3.5%;
+  background: transparent;
 }
 .detail-side { height: 100%; }
 .side-panel {
@@ -260,8 +259,36 @@ button { border: 0; cursor: pointer; }
 .comments-image { display: none; }
 
 @media (max-width: 900px) {
+  .detail-page .detail-content {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    padding: 0 3vw 8vw;
+    box-sizing: border-box;
+  }
+  .detail-page .detail-left {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: 52vw;
+    margin: 0 auto 4vw;
+  }
+  .detail-page .detail-side {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: 100%;
+    height: max(720px, 205vw);
+    margin: 0 auto;
+  }
+  .detail-page .side-panel {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
   .detail-side .comment-list {
-    height: 260px;
+    height: min(390px, 78vw);
     padding-right: 6px;
   }
   .comment-card {
@@ -269,6 +296,7 @@ button { border: 0; cursor: pointer; }
   }
   .comment-card p {
     font-size: 14px;
+    line-height: 1.55;
   }
 }
 
