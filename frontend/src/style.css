@@ -100,6 +100,28 @@ button { border: 0; cursor: pointer; }
   .create-save, .create-publish { height: 8%; }
 }
 
+/* The supplied Figma export is the visual source of truth for this page. */
+.create-page { min-height: 100vh; height: auto; background: #eef4e8; overflow-x: hidden; overflow-y: auto; }
+.create-reference-wrap { position: relative; width: min(100vw, 1920px); aspect-ratio: 1920 / 1080; margin: 0 auto; }
+.create-reference { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.create-reference-wrap > .create-upload { position: absolute; left: 5.55%; top: 15.2%; width: 19%; height: 33.7%; margin: 0; z-index: 2; background: transparent; box-shadow: none; border-radius: 10px; }
+.create-reference-wrap > .create-upload > img { object-fit: cover; border-radius: 10px; }
+.create-reference-wrap .create-field { z-index: 3; }
+.create-reference-wrap .create-title { left: 40.8%; top: 20.7%; width: 49.7%; height: 4.5%; }
+.create-reference-wrap .create-description { left: 40.8%; top: 28.7%; width: 49.7%; height: 27.5%; }
+.create-reference-wrap .create-location { left: 40.8%; top: 58.5%; width: 49.7%; height: 4.5%; }
+.create-reference-wrap .create-tags { left: 40.8%; top: 67.2%; z-index: 3; }
+.create-reference-wrap .create-statement { left: 40.8%; top: 75%; width: 49.7%; height: 4.5%; }
+.create-reference-wrap .create-tags button { width: clamp(72px, 5.2vw, 100px); height: clamp(34px, 3vw, 54px); font-size: clamp(13px, 1.05vw, 20px); }
+.create-back-hit, .create-save-hit, .create-publish-hit { position: absolute; z-index: 4; border: 0; background: transparent; cursor: pointer; }
+.create-back-hit { left: 2%; top: 3%; width: 18%; height: 10%; }
+.create-save-hit { left: 43.5%; top: 90%; width: 10%; height: 7%; }
+.create-publish-hit { left: 55%; top: 90%; width: 11%; height: 7%; }
+@media (max-width: 850px) {
+  .create-reference-wrap { width: 100vw; min-width: 720px; margin-left: 0; }
+  .create-page { overflow-x: auto; }
+}
+
 /* 详情页按 1920×1080 设计稿比例缩放，避免小窗口出现横向错位 */
 .detail-page { min-height: max(100vh, min(56.25vw, 1080px)); }
 .detail-page .detail-header { height: min(6.4vw, 123px); padding: 0 min(1.5vw, 29px); }

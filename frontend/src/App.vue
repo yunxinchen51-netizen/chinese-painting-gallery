@@ -42,6 +42,7 @@ import createAiLabel from './assets/create/AI助手.png'
 import createBack from './assets/create/image 238.png'
 import createUpload from './assets/create/Group 237562.png'
 import createPublish from './assets/create/发布作品.png'
+import createReference from './assets/create/编辑发布.png'
 
 const page = ref('gallery')
 const createForm = reactive({ title: '', description: '', location: '', statement: '', tags: [] })
@@ -215,29 +216,24 @@ function chooseImage(event) {
       <button class="new-work" @click="openCreate"><img :src="newWorkBadge" alt="新建画作" /></button>
     </main>
 
-    <main v-else-if="page === 'create'" key="create" class="figma-page create-page" :style="{ backgroundImage: `url(${createBackground})` }">
-      <header class="create-header">
-        <button class="create-back" @click="backFromCreate"><img :src="createBack" alt="返回" /><span>发布作品</span></button>
-        <div class="create-ai"><img :src="createCat" alt="AI助手" /><img :src="createAiLabel" alt="AI助手" /></div>
-      </header>
-      <section class="create-content">
+    <main v-else-if="page === 'create'" key="create" class="figma-page create-page">
+      <section class="create-reference-wrap">
+        <img class="create-reference" :src="createReference" alt="发布作品页面" />
         <label class="create-upload" :class="{ 'has-image': selectedImage }">
           <img v-if="selectedImage" :src="selectedImage" alt="已选择的作品" />
           <img v-else :src="createUpload" alt="添加作品图片" />
           <input type="file" accept="image/*" @change="chooseImage" />
         </label>
-        <div class="create-panel-wrap">
-          <img class="create-panel" :src="createPanel" alt="新建画作表单" />
-          <input v-model="createForm.title" class="create-field create-title" aria-label="标题" placeholder="" />
-          <textarea v-model="createForm.description" class="create-field create-description" aria-label="正文描述" placeholder="创作意图/色彩技巧运用..." />
-          <input v-model="createForm.location" class="create-field create-location" aria-label="标记地点" />
-          <div class="create-tags" aria-label="添加标签">
-            <button v-for="tag in ['山水','花鸟','人物','写意']" :key="tag" :class="{ selected: createForm.tags.includes(tag) }" @click="toggleCreateTag(tag)">{{ tag }}</button>
-          </div>
-          <input v-model="createForm.statement" class="create-field create-statement" aria-label="自主声明" />
-          <button class="create-save" @click="backFromCreate">保存</button>
-          <button class="create-publish" @click="backFromCreate"><img :src="createPublish" alt="发布作品" /></button>
+        <input v-model="createForm.title" class="create-field create-title" aria-label="标题" placeholder="" />
+        <textarea v-model="createForm.description" class="create-field create-description" aria-label="正文描述" placeholder="创作意图/色彩技巧运用..." />
+        <input v-model="createForm.location" class="create-field create-location" aria-label="标记地点" />
+        <div class="create-tags" aria-label="添加标签">
+          <button v-for="tag in ['山水','花鸟','人物','写意']" :key="tag" :class="{ selected: createForm.tags.includes(tag) }" @click="toggleCreateTag(tag)">{{ tag }}</button>
         </div>
+        <input v-model="createForm.statement" class="create-field create-statement" aria-label="自主声明" />
+        <button class="create-back-hit" @click="backFromCreate" aria-label="返回"></button>
+        <button class="create-save-hit" @click="backFromCreate" aria-label="保存"></button>
+        <button class="create-publish-hit" @click="backFromCreate" aria-label="发布作品"></button>
       </section>
     </main>
 
