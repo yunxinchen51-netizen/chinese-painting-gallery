@@ -225,7 +225,7 @@ function chooseImage(event) {
           <input type="file" accept="image/*" @change="chooseImage" />
         </label>
         <input v-model="createForm.title" class="create-field create-title" aria-label="标题" placeholder="" />
-        <textarea v-model="createForm.description" class="create-field create-description" aria-label="正文描述" placeholder="创作意图/色彩技巧运用..." />
+        <textarea v-model="createForm.description" class="create-field create-description" aria-label="正文描述" placeholder="" />
         <input v-model="createForm.location" class="create-field create-location" aria-label="标记地点" />
         <div class="create-tags" aria-label="添加标签">
           <button v-for="tag in ['山水','花鸟','人物','写意']" :key="tag" :class="{ selected: createForm.tags.includes(tag) }" @click="toggleCreateTag(tag)">{{ tag }}</button>
