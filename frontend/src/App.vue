@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
 import galleryDesk from './assets/figma/f7335acdfebc88c2cc66e1d65a48b2bd 1.png'
 import detailBackground from './assets/figma/703381535b14b0b99bac1dcb50cc3a8 1.png'
 import oneRain from './assets/figma/671d10ee6c078c9b59d936d31d62e53c 2.png'
@@ -45,8 +45,11 @@ import createPublish from './assets/create/发布作品.png'
 import createReference from './assets/create/编辑发布.png'
 
 const page = ref('gallery')
+const magicPathUrl = 'https://www.magicpath.ai/files/459295278583918592'
 const createForm = reactive({ title: '', description: '', location: '', statement: '', tags: [] })
 const selectedImage = ref('')
+const selectedFileName = ref('')
+const uploadInput = ref(null)
 const editMode = ref(false)
 const layoutVersion = 2
 const splitKeys = ['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves']
@@ -169,6 +172,11 @@ function backToGallery() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
+function openEditor() {
+  page.value = 'editor'
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
 function openCreate() {
   page.value = 'create'
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -188,14 +196,32 @@ function toggleCreateTag(tag) {
 function chooseImage(event) {
   const file = event.target.files?.[0]
   if (!file) return
+  if (!file.type.startsWith('image/')) return
+  if (selectedImage.value) URL.revokeObjectURL(selectedImage.value)
   selectedImage.value = URL.createObjectURL(file)
+  selectedFileName.value = file.name
+  // 允许再次选择同一张图片时也触发 change 事件。
+  event.target.value = ''
 }
+
+function clearSelectedImage() {
+  if (selectedImage.value) URL.revokeObjectURL(selectedImage.value)
+  selectedImage.value = ''
+  selectedFileName.value = ''
+}
+
+function triggerUpload() {
+  uploadInput.value?.click()
+}
+
+onBeforeUnmount(clearSelectedImage)
 </script>
 
 <template>
   <Transition name="dissolve" mode="out-in">
     <main v-if="page === 'gallery'" key="gallery" class="figma-page gallery-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${galleryDesk})` }">
       <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '完成调整' : '调整布局' }}</button>
+      <button class="magicpath-toggle" @click="openEditor">MagicPath 可视化编辑</button>
       <header class="figma-header">
         <div class="brand draggable-part" :style="dragStyle('brand')" @pointerdown="startDrag($event, 'brand')"><img :src="galleryBack" alt="返回" /><strong>我的画廊</strong></div>
         <nav class="tabs draggable-part" :style="dragStyle('tabs')" @pointerdown="startDrag($event, 'tabs')"><button class="image-tab active"><img :src="navLandscape" alt="山水胜景" /></button><button class="image-tab"><img :src="navBirds" alt="花鸟灵犀" /></button><button class="image-tab"><img :src="navPeople" alt="人物风流" /></button></nav>
@@ -216,13 +242,21 @@ function chooseImage(event) {
       <button class="new-work" @click="openCreate"><img :src="newWorkBadge" alt="新建画作" /></button>
     </main>
 
+    <main v-else-if="page === 'editor'" key="editor" class="editor-page">
+      <header class="editor-header"><button @click="backToGallery">← 返回画廊</button><strong>MagicPath 可视化网页编辑器</strong><a :href="magicPathUrl" target="_blank" rel="noreferrer">在 MagicPath 中打开 ↗</a></header>
+      <iframe class="magicpath-frame" :src="magicPathUrl" title="MagicPath 可视化网页编辑器"></iframe>
+    </main>
+
     <main v-else-if="page === 'create'" key="create" class="figma-page create-page">
       <section class="create-reference-wrap">
         <img class="create-reference" :src="createReference" alt="发布作品页面" />
-        <label class="create-upload" :class="{ 'has-image': selectedImage }">
-          <img v-if="selectedImage" :src="selectedImage" alt="已选择的作品" />
-          <img v-else :src="createUpload" alt="添加作品图片" />
-          <input type="file" accept="image/*" @change="chooseImage" />
+        <div v-if="selectedImage" class="create-preview" :title="selectedFileName">
+          <img :src="selectedImage" alt="已选择的作品预览" />
+        </div>
+        <label class="create-upload" :class="{ 'after-upload': selectedImage }" tabindex="0" title="点击上传作品图片" @keydown.enter.prevent="triggerUpload" @keydown.space.prevent="triggerUpload">
+          <img :src="createUpload" alt="点击添加作品图片" />
+          <span class="upload-hint">点击更换图片</span>
+          <input ref="uploadInput" type="file" accept="image/*" @change="chooseImage" />
         </label>
         <input v-model="createForm.title" class="create-field create-title" aria-label="标题" placeholder="" />
         <textarea v-model="createForm.description" class="create-field create-description" aria-label="正文描述" placeholder="" />
