@@ -180,6 +180,7 @@ function openEditor() {
 }
 
 function openCreate() {
+  if (editMode.value) return
   page.value = 'create'
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -222,8 +223,7 @@ onBeforeUnmount(clearSelectedImage)
 <template>
   <Transition name="dissolve" mode="out-in">
     <main v-if="page === 'gallery'" key="gallery" class="figma-page gallery-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${galleryDesk})` }">
-      <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '完成调整' : '调整布局' }}</button>
-      <button class="magicpath-toggle" @click="openEditor">MagicPath 可视化编辑</button>
+      <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '保存布局' : '调整布局' }}</button>
       <header class="figma-header">
         <div class="brand draggable-part" :style="dragStyle('brand')" @pointerdown="startDrag($event, 'brand')"><img :src="galleryBack" alt="返回" /><strong>我的画廊</strong></div>
         <nav class="tabs draggable-part" :style="dragStyle('tabs')" @pointerdown="startDrag($event, 'tabs')"><button class="image-tab active"><img :src="navLandscape" alt="山水胜景" /></button><button class="image-tab"><img :src="navBirds" alt="花鸟灵犀" /></button><button class="image-tab"><img :src="navPeople" alt="人物风流" /></button></nav>
@@ -231,17 +231,17 @@ onBeforeUnmount(clearSelectedImage)
         <img class="profile-badge" :src="profileBadge" alt="用户等级" />
       </header>
 
-      <section class="gallery-toolbar">
+      <section class="gallery-toolbar draggable-part" :style="dragStyle('gallery-toolbar')" @pointerdown="startDrag($event, 'gallery-toolbar')">
         <div class="gallery-tabs"><img :src="draftsBadge" alt="我的草稿 1/10" /><img :src="publishedBadge" alt="已发布 4/10" /></div>
       </section>
 
-      <section class="card-grid" aria-label="我的画廊作品">
+      <section class="card-grid draggable-part" :style="dragStyle('card-grid')" @pointerdown="startDrag($event, 'card-grid')" aria-label="我的画廊作品">
         <button v-for="work in works" :key="work.title" class="work-card" @click="openDetail(work)">
           <img class="card-export" :src="work.cardImage" :alt="work.title" />
         </button>
       </section>
 
-      <button class="new-work" @click="openCreate"><img :src="newWorkBadge" alt="新建画作" /></button>
+      <button class="new-work draggable-part" :style="dragStyle('new-work')" @pointerdown="startDrag($event, 'new-work')" @click="openCreate"><img :src="newWorkBadge" alt="新建画作" /></button>
     </main>
 
     <main v-else-if="page === 'editor'" key="editor" class="editor-page">
@@ -279,7 +279,7 @@ onBeforeUnmount(clearSelectedImage)
     </main>
 
     <main v-else-if="page === 'detail'" key="detail" class="figma-page detail-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${detailBackground})` }">
-      <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '完成调整' : '调整布局' }}</button>
+      <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '保存布局' : '调整布局' }}</button>
       <header class="figma-header detail-header">
         <button class="back" @click="backToGallery"><img :src="galleryBack" alt="返回" /><span>春山烟雨图</span></button>
         <div class="detail-tools draggable-part" :style="dragStyle('detail-tools')" @pointerdown="startDrag($event, 'detail-tools')"><img :src="aiCat" alt="AI助手" /><img :src="aiLabel" alt="AI助手" /></div>
