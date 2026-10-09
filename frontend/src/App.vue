@@ -45,7 +45,9 @@ import createPublish from './assets/create/发布作品.png'
 import createReference from './assets/create/编辑发布.png'
 
 const page = ref('gallery')
-const magicPathUrl = 'https://www.magicpath.ai/files/459295278583918592'
+const editorLayer = ref('hero')
+const editorDevice = ref('desktop')
+const editorZoom = ref(80)
 const createForm = reactive({ title: '', description: '', location: '', statement: '', tags: [] })
 const selectedImage = ref('')
 const selectedFileName = ref('')
@@ -243,8 +245,13 @@ onBeforeUnmount(clearSelectedImage)
     </main>
 
     <main v-else-if="page === 'editor'" key="editor" class="editor-page">
-      <header class="editor-header"><button @click="backToGallery">← 返回画廊</button><strong>MagicPath 可视化网页编辑器</strong><a :href="magicPathUrl" target="_blank" rel="noreferrer">在 MagicPath 中打开 ↗</a></header>
-      <iframe class="magicpath-frame" :src="magicPathUrl" title="MagicPath 可视化网页编辑器"></iframe>
+      <header class="editor-header"><button @click="backToGallery">← 返回画廊</button><strong>网页可视化编辑</strong><span class="editor-saved">● 已保存</span></header>
+      <div class="editor-workspace">
+        <aside class="editor-sidebar editor-layers"><div class="editor-tabs"><button class="active">图层</button><button>素材</button></div><div class="editor-label">页面</div><div class="editor-page-row">⌄　我的画廊 <i>●</i></div><div class="editor-label">图层　＋</div><button v-for="layer in [['hero','▣','画廊页面'],['heading','T','页面标题'],['cards','▤','作品卡片'],['nav','≡','顶部导航'],['button','▰','新建画作按钮']]" :key="layer[0]" class="editor-layer" :class="{ selected: editorLayer === layer[0] }" @click="editorLayer = layer[0]"><span>{{ layer[1] }}</span>{{ layer[2] }}<em>◉</em></button><button class="editor-add">＋ 添加区块</button></aside>
+        <section class="editor-canvas"><div class="editor-toolbar"><div class="editor-devices"><button :class="{ on: editorDevice === 'desktop' }" @click="editorDevice = 'desktop'">▣</button><button :class="{ on: editorDevice === 'tablet' }" @click="editorDevice = 'tablet'">▤</button><button :class="{ on: editorDevice === 'mobile' }" @click="editorDevice = 'mobile'">▥</button></div><span>我的画廊 / {{ editorLayer }}</span><div class="editor-zoom"><button @click="editorZoom = Math.max(50, editorZoom - 10)">−</button>{{ editorZoom }}%<button @click="editorZoom = Math.min(110, editorZoom + 10)">＋</button></div></div><div class="editor-stage"><div class="editor-site" :class="editorDevice" :style="{ transform: 'scale(' + editorZoom / 100 + ')' }"><div class="editor-site-nav"><strong>我的画廊</strong><span>山水胜景　 花鸟灵犀　 人物风流</span><b>⌕ 搜索画作</b></div><div class="editor-site-title" :class="{ focus: editorLayer === 'heading' }" @click="editorLayer = 'heading'"><small>我的作品集</small><h1>在笔墨之间，<i>收藏山水。</i></h1><p>记录每一幅画作的灵感与故事。</p></div><div class="editor-card-grid" :class="{ focus: editorLayer === 'cards' }" @click="editorLayer = 'cards'"><div v-for="work in works" :key="work.title" class="editor-card"><img :src="work.cardImage" :alt="work.title"/><strong>{{ work.title }}</strong><small>原创作品　♡ {{ work.likes }}</small></div></div><button class="editor-new" :class="{ focus: editorLayer === 'button' }" @click="editorLayer = 'button'">＋ 新建画作</button></div></div></section>
+        <aside class="editor-sidebar editor-inspector"><div class="editor-inspector-title">检查器　⋯</div><div class="editor-selected">▣　<strong>{{ ({ hero: '画廊页面', heading: '页面标题', cards: '作品卡片', nav: '顶部导航', button: '新建画作按钮' })[editorLayer] }}</strong>　◉</div><div class="editor-inspect-section"><div class="editor-label">布局　⌃</div><label>宽度<input value="填充" readonly/></label><label>高度<input value="自适应" readonly/></label></div><div class="editor-inspect-section"><div class="editor-label">外观　⌃</div><label>背景<div class="editor-color">●　#F4F1EA　⌄</div></label><label>圆角<input value="12 px" readonly/></label></div><div class="editor-inspect-section"><div class="editor-label">交互　⌃</div><button class="editor-interaction">＋ 添加交互　→</button></div></aside>
+      </div>
+      <footer class="editor-status">●　所有更改已保存 <span>⌘ K　命令菜单</span></footer>
     </main>
 
     <main v-else-if="page === 'create'" key="create" class="figma-page create-page">
