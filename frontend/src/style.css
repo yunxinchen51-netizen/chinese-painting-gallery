@@ -132,6 +132,65 @@ button { border: 0; cursor: pointer; }
   .create-page { overflow-x: auto; }
 }
 
+/* Keep the 16:9 reference canvas inside the visible browser area.  The
+   previous width-only sizing made tall windows leave a large empty strip
+   below the artwork and caused the form to feel vertically misaligned. */
+@media (min-width: 851px) {
+  .create-page {
+    background: #efebe4;
+    min-height: 100vh;
+  }
+  .create-reference-wrap {
+    width: 100vw;
+    height: 100svh;
+    aspect-ratio: auto;
+    max-height: none;
+  }
+  .create-reference-wrap > .create-reference {
+    object-fit: fill;
+  }
+}
+
+/* The detail artwork is a complete page composition. On desktop let the
+   composition occupy the viewport instead of preserving a narrower fixed
+   canvas that creates side/bottom gaps at different browser proportions. */
+@media (min-width: 901px) {
+  .detail-page {
+    width: 100vw;
+    height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .detail-page .detail-content {
+    height: calc(100svh - min(6.4vw, 123px));
+    min-height: 0;
+  }
+}
+
+/* Windows display scaling can make a wide desktop viewport report a CSS
+   width below 850px. Do not apply the phone canvas rules in that case. */
+@media (min-width: 601px) {
+  .create-page { overflow-x: hidden; }
+  .create-reference-wrap {
+    width: 100vw;
+    min-width: 0;
+    height: 100svh;
+    aspect-ratio: auto;
+    margin: 0;
+  }
+  .create-reference-wrap > .create-reference { object-fit: fill; }
+  .detail-page {
+    width: 100vw;
+    height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .detail-page .detail-content {
+    height: calc(100svh - min(6.4vw, 123px));
+    min-height: 0;
+  }
+}
+
 /* 详情页按 1920×1080 设计稿比例缩放，避免小窗口出现横向错位 */
 .detail-page { min-height: max(100vh, min(56.25vw, 1080px)); }
 .detail-page .detail-header { height: min(6.4vw, 123px); padding: 0 min(1.5vw, 29px); }
