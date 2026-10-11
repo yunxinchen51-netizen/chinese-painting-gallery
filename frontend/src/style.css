@@ -418,6 +418,22 @@ button { border: 0; cursor: pointer; }
   font-size: 14px;
   box-shadow: 0 3px 10px #4c6b6b33;
 }
+.layout-sync-status {
+  position: fixed;
+  right: 18px;
+  bottom: 64px;
+  z-index: 20;
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: #fffdf0e8;
+  color: #6d7168;
+  font-size: 12px;
+  box-shadow: 0 2px 8px #4c6b6b22;
+}
+.layout-sync-status.saved { color: #3f8060; }
+.layout-sync-status.saving,
+.layout-sync-status.checking { color: #8a6c35; }
+.layout-sync-status.local-only { color: #a35445; }
 .draggable-part {
   translate: var(--drag-x, 0) var(--drag-y, 0);
 }

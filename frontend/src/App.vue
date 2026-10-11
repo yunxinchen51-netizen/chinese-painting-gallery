@@ -48,6 +48,7 @@ const page = ref('gallery')
 const editorLayer = ref('hero')
 const editorDevice = ref('desktop')
 const editorZoom = ref(80)
+const layoutSyncStatus = ref('checking')
 const createForm = reactive({ title: '', description: '', location: '', statement: '', tags: [] })
 const selectedImage = ref('')
 const selectedFileName = ref('')
@@ -57,7 +58,7 @@ const layoutVersion = 2
 const splitKeys = ['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves']
 const dragPositions = reactive(JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}'))
 const dragState = reactive({ key: '', startX: 0, startY: 0, originX: 0, originY: 0 })
-const apiBase = (import.meta.env.VITE_API_BASE_URL || '/api').replace(/\/$/, '')
+const apiBase = (import.meta.env.VITE_API_BASE_URL || 'https://chinese-painting-gallery-api.onrender.com/api').replace(/\/$/, '')
 const designWidth = 1920
 const getCanvasWidth = () => Math.min(window.innerWidth, designWidth)
 const canvasWidth = ref(getCanvasWidth())
@@ -98,18 +99,24 @@ function endDrag() {
   dragState.key = ''
 }
 
-function persistLayout() {
+async function persistLayout() {
   const positions = JSON.parse(JSON.stringify(dragPositions))
   positions.__viewportWidth = canvasWidth.value
   positions.__layoutVersion = layoutVersion
   layoutBaseWidth.value = canvasWidth.value
   // Keep a local copy for instant fallback, while the API is the shared source of truth.
   localStorage.setItem('gallery-layout-positions', JSON.stringify(positions))
+  layoutSyncStatus.value = 'saving'
   fetch(`${apiBase}/layout-positions/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ positions }),
-  }).catch(() => {})
+  }).then((response) => {
+    if (!response.ok) throw new Error('Cloud layout save failed')
+    layoutSyncStatus.value = 'saved'
+  }).catch(() => {
+    layoutSyncStatus.value = 'local-only'
+  })
 }
 
 function toggleEditMode() {
@@ -127,6 +134,7 @@ onMounted(() => {
       return response.json()
     })
     .then(({ positions }) => {
+      layoutSyncStatus.value = 'saved'
       if (!positions || typeof positions !== 'object') return
       const needsReset = positions.__layoutVersion !== layoutVersion
       if (needsReset) {
@@ -146,7 +154,7 @@ onMounted(() => {
       localStorage.setItem('gallery-layout-positions', JSON.stringify(dragPositions))
       if (needsReset) persistLayout()
     })
-    .catch(() => {})
+    .catch(() => { layoutSyncStatus.value = 'local-only' })
 })
 
 const works = [
@@ -224,6 +232,7 @@ onBeforeUnmount(clearSelectedImage)
   <Transition name="dissolve" mode="out-in">
     <main v-if="page === 'gallery'" key="gallery" class="figma-page gallery-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${galleryDesk})` }">
       <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '保存布局' : '调整布局' }}</button>
+      <span class="layout-sync-status" :class="layoutSyncStatus">{{ layoutSyncStatus === 'saved' ? '云端已保存' : layoutSyncStatus === 'saving' ? '正在保存…' : layoutSyncStatus === 'local-only' ? '仅本机保存' : '正在连接云端…' }}</span>
       <header class="figma-header">
         <div class="brand draggable-part" :style="dragStyle('brand')" @pointerdown="startDrag($event, 'brand')"><img :src="galleryBack" alt="返回" /><strong>我的画廊</strong></div>
         <nav class="tabs draggable-part" :style="dragStyle('tabs')" @pointerdown="startDrag($event, 'tabs')"><button class="image-tab active"><img :src="navLandscape" alt="山水胜景" /></button><button class="image-tab"><img :src="navBirds" alt="花鸟灵犀" /></button><button class="image-tab"><img :src="navPeople" alt="人物风流" /></button></nav>
