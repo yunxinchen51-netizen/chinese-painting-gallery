@@ -142,6 +142,23 @@ button { border: 0; cursor: pointer; }
 .detail-tools img:first-child { width: 9vw; transform: translateY(-.4vw); }
 .detail-tools img:last-child { width: 8.5vw; transform: translateY(3vw); }
 .detail-page .detail-content { width: 100%; min-height: min(49.85vw, 957px); height: min(49.85vw, 957px); }
+
+/* Responsive detail canvas: preserve the artwork proportions and let the
+   document scroll when the available viewport is narrower than the design. */
+@media (min-width: 901px) {
+  .detail-page.figma-page {
+    width: 100%;
+    max-width: none;
+    min-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .detail-page .detail-content {
+    width: min(100vw, 1920px);
+    min-width: 960px;
+    margin: 0 auto;
+  }
+}
 .detail-left { left: 0%; top: 2.04%; width: 54%; height: 83.33%; }
 .detail-left .paper-frame { left: 4.08%; top: 5.44%; width: 89.8%; height: 97.4%; }
 .detail-left .detail-art { left: 11.02%; top: 11.55%; width: 75.72%; height: 72.55%; }
