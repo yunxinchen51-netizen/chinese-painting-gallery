@@ -189,6 +189,11 @@ button { border: 0; cursor: pointer; }
     height: calc(100svh - min(6.4vw, 123px));
     min-height: 0;
   }
+  .detail-page .detail-left,
+  .detail-page .detail-side {
+    top: 0;
+    height: 100%;
+  }
 }
 
 /* 详情页按 1920×1080 设计稿比例缩放，避免小窗口出现横向错位 */
