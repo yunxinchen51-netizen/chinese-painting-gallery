@@ -159,6 +159,20 @@ button { border: 0; cursor: pointer; }
     margin: 0 auto;
   }
 }
+
+/* Fullscreen browsers change the viewport height without changing the
+   artwork width. Use the real viewport height so the detail composition does
+   not keep the old width-derived 56.25vw height and drift off screen. */
+@media (min-width: 901px) {
+  .detail-page.figma-page {
+    height: 100vh;
+    min-height: 100vh;
+  }
+  .detail-page .detail-content {
+    height: calc(100vh - min(6.4vw, 123px)) !important;
+    min-height: 0 !important;
+  }
+}
 .detail-left { left: 0%; top: 2.04%; width: 54%; height: 83.33%; }
 .detail-left .paper-frame { left: 4.08%; top: 5.44%; width: 89.8%; height: 97.4%; }
 .detail-left .detail-art { left: 11.02%; top: 11.55%; width: 75.72%; height: 72.55%; }
