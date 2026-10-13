@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted, onBeforeUnmount } from 'vue'
+import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import galleryDesk from './assets/figma/f7335acdfebc88c2cc66e1d65a48b2bd 1.png'
 import detailBackground from './assets/figma/703381535b14b0b99bac1dcb50cc3a8 1.png'
 import oneRain from './assets/figma/671d10ee6c078c9b59d936d31d62e53c 2.png'
@@ -53,6 +53,7 @@ const createForm = reactive({ title: '', description: '', location: '', statemen
 const selectedImage = ref('')
 const selectedFileName = ref('')
 const uploadInput = ref(null)
+const uploadedWorks = ref(JSON.parse(localStorage.getItem('gallery-uploaded-works') || '[]'))
 const editMode = ref(false)
 const layoutVersion = 2
 const splitKeys = ['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves']
@@ -163,6 +164,7 @@ const works = [
   { title: '溪山清远', count: '172', likes: '32', comments: '5', image: clearStream, cardImage: cardThree },
   { title: '秋林晚照图', count: '1296', likes: '258', comments: '7', image: autumnForest, cardImage: cardFour },
 ]
+const galleryWorks = computed(() => [...uploadedWorks.value, ...works])
 
 const comments = [
   { text: '看到这幅画，我仿佛回到了儿时乡间小院，看着满园春色，听着燕子呢喃。楼阁和桃花的搭配让人感到静谧又生机勃勃，像是对故乡春日的一种深情呼唤。', likes: 3 },
@@ -175,6 +177,34 @@ function openDetail(work) {
   if (work.title !== '一蓑烟雨') return
   page.value = 'detail'
   window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+function publishCreate() {
+  if (!selectedImage.value) {
+    window.alert('请先上传作品图片')
+    return
+  }
+  const uploaded = {
+    id: `uploaded-${Date.now()}`,
+    title: createForm.title.trim() || selectedFileName.value.replace(/\.[^.]+$/, '') || '未命名作品',
+    description: createForm.description.trim(),
+    location: createForm.location.trim(),
+    statement: createForm.statement.trim(),
+    tags: [...createForm.tags],
+    image: selectedImage.value,
+    uploaded: true,
+    likes: '0',
+    comments: '0',
+  }
+  uploadedWorks.value = [uploaded, ...uploadedWorks.value]
+  localStorage.setItem('gallery-uploaded-works', JSON.stringify(uploadedWorks.value))
+  clearSelectedImage()
+  createForm.title = ''
+  createForm.description = ''
+  createForm.location = ''
+  createForm.statement = ''
+  createForm.tags = []
+  backFromCreate()
 }
 
 function backToGallery() {
@@ -208,15 +238,16 @@ function chooseImage(event) {
   const file = event.target.files?.[0]
   if (!file) return
   if (!file.type.startsWith('image/')) return
-  if (selectedImage.value) URL.revokeObjectURL(selectedImage.value)
-  selectedImage.value = URL.createObjectURL(file)
-  selectedFileName.value = file.name
-  // 允许再次选择同一张图片时也触发 change 事件。
-  event.target.value = ''
+  const reader = new FileReader()
+  reader.onload = () => {
+    selectedImage.value = String(reader.result || '')
+    selectedFileName.value = file.name
+    event.target.value = ''
+  }
+  reader.readAsDataURL(file)
 }
 
 function clearSelectedImage() {
-  if (selectedImage.value) URL.revokeObjectURL(selectedImage.value)
   selectedImage.value = ''
   selectedFileName.value = ''
 }
@@ -244,8 +275,12 @@ onBeforeUnmount(clearSelectedImage)
       </section>
 
       <section class="card-grid draggable-part" :style="dragStyle('card-grid')" @pointerdown="startDrag($event, 'card-grid')" aria-label="我的画廊作品">
-        <button v-for="work in works" :key="work.title" class="work-card" @click="openDetail(work)">
-          <img class="card-export" :src="work.cardImage" :alt="work.title" />
+        <button v-for="work in galleryWorks" :key="work.id || work.title" class="work-card" :class="{ 'uploaded-work-card': work.uploaded }" @click="openDetail(work)">
+          <template v-if="work.uploaded">
+            <img class="uploaded-work-image" :src="work.image" :alt="work.title" />
+            <span class="uploaded-work-info"><strong>{{ work.title }}</strong><small>原创作品　♡ {{ work.likes }}</small></span>
+          </template>
+          <img v-else class="card-export" :src="work.cardImage" :alt="work.title" />
         </button>
       </section>
 
@@ -282,7 +317,7 @@ onBeforeUnmount(clearSelectedImage)
         <input v-model="createForm.statement" class="create-field create-statement" aria-label="自主声明" />
         <button class="create-back-hit" @click="backFromCreate" aria-label="返回"></button>
         <button class="create-save-hit" @click="backFromCreate" aria-label="保存"></button>
-        <button class="create-publish-hit" @click="backFromCreate" aria-label="发布作品"></button>
+        <button class="create-publish-hit" @click="publishCreate" aria-label="发布作品"></button>
       </section>
     </main>
 
