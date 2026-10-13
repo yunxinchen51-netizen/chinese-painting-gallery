@@ -54,7 +54,9 @@ const selectedImage = ref('')
 const selectedFileName = ref('')
 const uploadInput = ref(null)
 const uploadedWorks = ref(JSON.parse(localStorage.getItem('gallery-uploaded-works') || '[]'))
+const removedWorkIds = ref(JSON.parse(localStorage.getItem('gallery-removed-works') || '[]'))
 const editMode = ref(false)
+const workEditMode = ref(false)
 const layoutVersion = 2
 const splitKeys = ['detail-title', 'detail-description', 'detail-tags', 'detail-location', 'original-badge', 'stats-likes', 'stats-comments', 'stats-saves']
 const dragPositions = reactive(JSON.parse(localStorage.getItem('gallery-layout-positions') || '{}'))
@@ -125,6 +127,18 @@ function toggleEditMode() {
   if (!editMode.value) endDrag()
 }
 
+function toggleWorkEditMode() {
+  workEditMode.value = !workEditMode.value
+}
+
+function deleteWork(work) {
+  const workId = work.id || work.title
+  uploadedWorks.value = uploadedWorks.value.filter((item) => item.id !== workId)
+  if (!work.uploaded && !removedWorkIds.value.includes(workId)) removedWorkIds.value = [...removedWorkIds.value, workId]
+  localStorage.setItem('gallery-uploaded-works', JSON.stringify(uploadedWorks.value))
+  localStorage.setItem('gallery-removed-works', JSON.stringify(removedWorkIds.value))
+}
+
 onMounted(() => {
   window.addEventListener('pointermove', moveDrag)
   window.addEventListener('pointerup', endDrag)
@@ -164,7 +178,7 @@ const works = [
   { title: '溪山清远', count: '172', likes: '32', comments: '5', image: clearStream, cardImage: cardThree },
   { title: '秋林晚照图', count: '1296', likes: '258', comments: '7', image: autumnForest, cardImage: cardFour },
 ]
-const galleryWorks = computed(() => [...uploadedWorks.value, ...works])
+const galleryWorks = computed(() => [...uploadedWorks.value, ...works].filter((work) => !removedWorkIds.value.includes(work.id || work.title)))
 
 const comments = [
   { text: '看到这幅画，我仿佛回到了儿时乡间小院，看着满园春色，听着燕子呢喃。楼阁和桃花的搭配让人感到静谧又生机勃勃，像是对故乡春日的一种深情呼唤。', likes: 3 },
@@ -262,6 +276,7 @@ onBeforeUnmount(clearSelectedImage)
 <template>
   <Transition name="dissolve" mode="out-in">
     <main v-if="page === 'gallery'" key="gallery" class="figma-page gallery-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${galleryDesk})` }">
+      <button class="gallery-edit-toggle" @click="toggleWorkEditMode">{{ workEditMode ? '完成编辑' : '编辑作品' }}</button>
       <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '保存布局' : '调整布局' }}</button>
       <header class="figma-header">
         <div class="brand draggable-part" :style="dragStyle('brand')" @pointerdown="startDrag($event, 'brand')"><img :src="galleryBack" alt="返回" /><strong>我的画廊</strong></div>
@@ -275,13 +290,14 @@ onBeforeUnmount(clearSelectedImage)
       </section>
 
       <section class="card-grid draggable-part" :style="dragStyle('card-grid')" @pointerdown="startDrag($event, 'card-grid')" aria-label="我的画廊作品">
-        <button v-for="work in galleryWorks" :key="work.id || work.title" class="work-card" :class="{ 'uploaded-work-card': work.uploaded }" @click="openDetail(work)">
+        <article v-for="work in galleryWorks" :key="work.id || work.title" class="work-card" :class="{ 'uploaded-work-card': work.uploaded }" @click="!workEditMode && openDetail(work)">
           <template v-if="work.uploaded">
             <img class="uploaded-work-image" :src="work.image" :alt="work.title" />
-            <span class="uploaded-work-info"><strong>{{ work.title }}</strong><small>原创作品　♡ {{ work.likes }}</small></span>
+            <span class="uploaded-work-info"><strong>{{ work.title }}</strong><em>原创作品</em><small>♡ {{ work.likes }}　评论 {{ work.comments }}</small></span>
           </template>
           <img v-else class="card-export" :src="work.cardImage" :alt="work.title" />
-        </button>
+          <button v-if="workEditMode" class="work-delete" type="button" aria-label="删除作品" @click.stop="deleteWork(work)">×</button>
+        </article>
       </section>
 
       <button class="new-work draggable-part" :style="dragStyle('new-work')" @pointerdown="startDrag($event, 'new-work')" @click="openCreate"><img :src="newWorkBadge" alt="新建画作" /></button>
