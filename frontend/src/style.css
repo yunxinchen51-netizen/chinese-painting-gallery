@@ -160,6 +160,29 @@ button { border: 0; cursor: pointer; }
   }
 }
 
+/* Fullscreen publish page: fill the viewport and preserve the 16:9 artwork
+   ratio so the reference canvas cannot end early with a white strip. */
+@media (min-width: 901px) {
+  .create-page.figma-page {
+    width: 100vw;
+    max-width: none;
+    height: 100vh;
+    min-height: 100vh;
+    overflow: hidden;
+  }
+  .create-page .create-reference-wrap {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  .create-page .create-reference {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
 /* Fullscreen browsers change the viewport height without changing the
    artwork width. Use the real viewport height so the detail composition does
    not keep the old width-derived 56.25vw height and drift off screen. */
