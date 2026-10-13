@@ -292,6 +292,7 @@ onBeforeUnmount(clearSelectedImage)
       <section class="card-grid draggable-part" :style="dragStyle('card-grid')" @pointerdown="startDrag($event, 'card-grid')" aria-label="我的画廊作品">
         <article v-for="work in galleryWorks" :key="work.id || work.title" class="work-card" :class="{ 'uploaded-work-card': work.uploaded }" @click="!workEditMode && openDetail(work)">
           <template v-if="work.uploaded">
+            <img class="uploaded-card-ui" :src="cardOne" alt="作品卡片" />
             <img class="uploaded-work-image" :src="work.image" :alt="work.title" />
             <span class="uploaded-work-info"><strong>{{ work.title }}</strong><em>原创作品</em><small>♡ {{ work.likes }}　评论 {{ work.comments }}</small></span>
           </template>
