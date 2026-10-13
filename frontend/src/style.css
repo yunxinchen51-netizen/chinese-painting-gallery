@@ -195,6 +195,10 @@ button { border: 0; cursor: pointer; }
     height: calc(100vh - min(6.4vw, 123px)) !important;
     min-height: 0 !important;
   }
+  .detail-page .detail-side .comment-list {
+    height: 44% !important;
+    max-height: none;
+  }
 }
 .detail-left { left: 0%; top: 2.04%; width: 54%; height: 83.33%; }
 .detail-left .paper-frame { left: 4.08%; top: 5.44%; width: 89.8%; height: 97.4%; }
