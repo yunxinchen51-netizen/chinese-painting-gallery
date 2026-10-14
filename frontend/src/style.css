@@ -19,10 +19,10 @@ button { border: 0; cursor: pointer; }
 .uploaded-work-card { position: relative; aspect-ratio: 773 / 292; overflow: hidden; border-radius: 18px; background: #fffaf0; box-shadow: 0 8px 20px #5a49332b; }
 .uploaded-card-ui { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: fill; pointer-events: none; }
 .uploaded-work-image { position: absolute; z-index: 1; left: 1.4%; top: 3.8%; width: 47.7%; height: 92.3%; object-fit: cover; border-radius: 14px; }
-.uploaded-work-info { position: absolute; z-index: 2; left: 51.5%; top: 13%; width: 45%; height: 76%; display: flex; flex-direction: column; align-items: flex-start; gap: clamp(4px, .65vw, 10px); padding: 5% 6% 3%; text-align: left; }
-.uploaded-work-info strong { display: block; width: 100%; overflow: hidden; color: #6a5a48; font-size: clamp(16px, 1.45vw, 28px); font-weight: 600; line-height: 1.25; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+.uploaded-work-info { position: absolute; z-index: 2; left: 51.5%; top: 13%; width: 45%; height: 76%; display: flex; flex-direction: column; align-items: flex-start; gap: clamp(4px, .65vw, 10px); padding: 5% 6% 3%; border-radius: 0 12px 12px 0; background: #fffaf0; text-align: left; }
+.uploaded-work-info strong { display: block; width: 100%; overflow: hidden; padding: .3em .25em; border: 1px solid #c8baa1; color: #6a5a48; font-size: clamp(16px, 1.45vw, 28px); font-weight: 600; line-height: 1.25; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
 .uploaded-work-info em { padding: .28em .8em; border: 1px solid #c8baa1; border-radius: 999px; color: #aa9a80; font-size: clamp(11px, .8vw, 16px); font-style: normal; }
-.uploaded-work-info small { display: block; margin-top: auto; color: #9a8476; font-size: clamp(11px, .8vw, 16px); }
+.uploaded-work-info small { display: block; width: 100%; margin-top: auto; padding-top: 5%; border-top: 1px solid #c8baa1; color: #9a8476; font-size: clamp(11px, .8vw, 16px); }
 .gallery-edit-toggle { position: absolute; z-index: 4; top: 145px; right: 4%; padding: 10px 22px; border: 1px solid #9f8d70; border-radius: 999px; background: #fffaf0dd; color: #76594d; font-size: clamp(13px, 1vw, 18px); box-shadow: 0 4px 12px #5a493326; }
 .work-delete { position: absolute; z-index: 3; top: 10px; right: 10px; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: #8c5049; color: #fff; font-family: Arial, sans-serif; font-size: 26px; line-height: 1; box-shadow: 0 3px 8px #44251e55; }
 .new-work { position: absolute; z-index: 2; right: 4%; bottom: 35px; padding: 0; background: transparent; }.new-work img { display: block; width: 200px; height: 70px; object-fit: contain; }
