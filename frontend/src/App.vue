@@ -45,6 +45,7 @@ import createPublish from './assets/create/发布作品.png'
 import createReference from './assets/create/编辑发布.png'
 
 const page = ref('gallery')
+const selectedWork = ref(null)
 const editorLayer = ref('hero')
 const editorDevice = ref('desktop')
 const editorZoom = ref(80)
@@ -188,7 +189,8 @@ const comments = [
 ]
 
 function openDetail(work) {
-  if (work.title !== '一蓑烟雨') return
+  if (!work.uploaded && work.title !== '一蓑烟雨') return
+  selectedWork.value = work.uploaded ? work : null
   page.value = 'detail'
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -222,6 +224,7 @@ function publishCreate() {
 }
 
 function backToGallery() {
+  selectedWork.value = null
   page.value = 'gallery'
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
@@ -340,7 +343,7 @@ onBeforeUnmount(clearSelectedImage)
     <main v-else-if="page === 'detail'" key="detail" class="figma-page detail-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${detailBackground})` }">
       <button class="layout-toggle" @click="toggleEditMode">{{ editMode ? '保存布局' : '调整布局' }}</button>
       <header class="figma-header detail-header">
-        <button class="back" @click="backToGallery"><img :src="galleryBack" alt="返回" /><span>春山烟雨图</span></button>
+        <button class="back" @click="backToGallery"><img :src="galleryBack" alt="返回" /><span>{{ selectedWork?.uploaded ? selectedWork.title : '春山烟雨图' }}</span></button>
         <div class="detail-tools draggable-part" :style="dragStyle('detail-tools')" @pointerdown="startDrag($event, 'detail-tools')"><img :src="aiCat" alt="AI助手" /><img :src="aiLabel" alt="AI助手" /></div>
       </header>
 
@@ -348,7 +351,7 @@ onBeforeUnmount(clearSelectedImage)
         <div class="detail-left draggable-part" :style="dragStyle('detail-left')" @pointerdown="startDrag($event, 'detail-left')">
           <img class="roller roller-top" :src="rollerTop" alt="" />
           <img class="paper-frame" :src="detailPaper" alt="" />
-          <img class="detail-art" :src="oneRain" alt="春山烟雨图" />
+          <img class="detail-art" :src="selectedWork?.uploaded ? selectedWork.image : oneRain" :alt="selectedWork?.uploaded ? selectedWork.title : '春山烟雨图'" />
           <img class="original-badge draggable-part" :style="dragStyle('original-badge')" @pointerdown="startDrag($event, 'original-badge')" :src="originalBadge" alt="原创作品" />
           <div class="stats-piece stats-likes draggable-part" :style="dragStyle('stats-likes')" @pointerdown="startDrag($event, 'stats-likes')"><img :src="statsLikes" alt="点赞 317" /></div>
           <div class="stats-piece stats-comments draggable-part" :style="dragStyle('stats-comments')" @pointerdown="startDrag($event, 'stats-comments')"><img :src="statsComments" alt="评论 32" /></div>
@@ -358,18 +361,26 @@ onBeforeUnmount(clearSelectedImage)
         <section class="detail-side draggable-part" :style="dragStyle('detail-side')" @pointerdown="startDrag($event, 'detail-side')">
           <img class="side-panel" :src="detailPanel" alt="" />
           <img class="detail-profile" :src="detailProfile" alt="好学的皓皓" />
-          <div class="meta-piece meta-title draggable-part" :style="dragStyle('detail-title')" @pointerdown="startDrag($event, 'detail-title')">
-            <img :src="detailMetaTitle" alt="作品标题" />
-          </div>
-          <div class="meta-piece meta-description draggable-part" :style="dragStyle('detail-description')" @pointerdown="startDrag($event, 'detail-description')">
-            <img :src="detailMetaDescription" alt="作品简介" />
-          </div>
-          <div class="meta-piece meta-tags draggable-part" :style="dragStyle('detail-tags')" @pointerdown="startDrag($event, 'detail-tags')">
-            <img :src="detailMetaTags" alt="作品标签" />
-          </div>
-          <div class="meta-piece meta-location draggable-part" :style="dragStyle('detail-location')" @pointerdown="startDrag($event, 'detail-location')">
-            <img :src="detailMetaLocation" alt="作品地点" />
-          </div>
+          <template v-if="selectedWork?.uploaded">
+            <div class="uploaded-detail-title">{{ selectedWork.title }}</div>
+            <div class="uploaded-detail-description">{{ selectedWork.description || '这幅作品记录了创作者在笔墨与色彩之间的灵感。' }}</div>
+            <div class="uploaded-detail-tags"><span v-for="tag in (selectedWork.tags?.length ? selectedWork.tags : ['原创作品'])" :key="tag">{{ tag }}</span></div>
+            <div v-if="selectedWork.location" class="uploaded-detail-location">⌖ {{ selectedWork.location }}</div>
+          </template>
+          <template v-else>
+            <div class="meta-piece meta-title draggable-part" :style="dragStyle('detail-title')" @pointerdown="startDrag($event, 'detail-title')">
+              <img :src="detailMetaTitle" alt="作品标题" />
+            </div>
+            <div class="meta-piece meta-description draggable-part" :style="dragStyle('detail-description')" @pointerdown="startDrag($event, 'detail-description')">
+              <img :src="detailMetaDescription" alt="作品简介" />
+            </div>
+            <div class="meta-piece meta-tags draggable-part" :style="dragStyle('detail-tags')" @pointerdown="startDrag($event, 'detail-tags')">
+              <img :src="detailMetaTags" alt="作品标签" />
+            </div>
+            <div class="meta-piece meta-location draggable-part" :style="dragStyle('detail-location')" @pointerdown="startDrag($event, 'detail-location')">
+              <img :src="detailMetaLocation" alt="作品地点" />
+            </div>
+          </template>
           <img class="comments-label-image" :src="commentsLabel" alt="评论" />
           <div class="comment-input">写下你的点评吧！</div>
           <div class="comment-list" aria-label="评论区">
