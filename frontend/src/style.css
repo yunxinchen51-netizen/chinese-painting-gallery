@@ -134,9 +134,9 @@ button { border: 0; cursor: pointer; }
 .create-reference-wrap .create-title { left: 40.8%; top: 20.7%; width: 49.7%; height: 4.5%; }
 .create-reference-wrap .create-description { left: 40.8%; top: 28.7%; width: 49.7%; height: 27.5%; }
 .create-reference-wrap .create-location { left: 40.8%; top: 58.5%; width: 49.7%; height: 4.5%; }
-.create-reference-wrap .create-tags { left: 40.8%; top: 67.2%; z-index: 3; }
+.create-reference-wrap .create-tags { left: 40.8%; top: 67.2%; z-index: 3; width: 31%; height: 4.7%; gap: 3.5%; }
 .create-reference-wrap .create-statement { left: 40.8%; top: 75%; width: 49.7%; height: 4.5%; }
-.create-reference-wrap .create-tags button { width: clamp(72px, 5.2vw, 100px); height: clamp(34px, 3vw, 54px); font-size: clamp(13px, 1.05vw, 20px); }
+.create-reference-wrap .create-tags button { flex: 0 0 16%; width: 16%; height: 100%; font-size: 0 !important; color: transparent !important; }
 .create-reference-wrap .create-tags button { background: transparent; color: transparent; box-shadow: none; }
 .create-reference-wrap .create-tags button.selected { background: transparent; }
 .create-reference-wrap .create-tags button.selected { background: #a58f5a66; color: transparent; box-shadow: 0 3px 8px #6b594055; }
