@@ -383,7 +383,8 @@ onBeforeUnmount(clearSelectedImage)
           </template>
           <img class="comments-label-image" :src="commentsLabel" alt="评论" />
           <div class="comment-input">写下你的点评吧！</div>
-          <div class="comment-list" aria-label="评论区">
+          <div v-if="selectedWork?.uploaded" class="empty-comments">快留下你的评论吧</div>
+          <div v-else class="comment-list" aria-label="评论区">
             <article v-for="comment in comments" :key="comment.text" class="comment-card">
               <div class="comment-card-main">
                 <div class="comment-avatar">👤</div>
