@@ -331,7 +331,7 @@ onBeforeUnmount(clearSelectedImage)
         <textarea v-model="createForm.description" class="create-field create-description" aria-label="正文描述" placeholder="" />
         <input v-model="createForm.location" class="create-field create-location" aria-label="标记地点" />
         <div class="create-tags" aria-label="添加标签">
-          <button v-for="tag in ['山水','花鸟','人物','写意']" :key="tag" :class="{ selected: createForm.tags.includes(tag) }" @click="toggleCreateTag(tag)">{{ tag }}</button>
+          <button v-for="tag in ['山水','花鸟','人物','写意']" :key="tag" :class="{ selected: createForm.tags.includes(tag) }" :aria-pressed="createForm.tags.includes(tag)" @click="toggleCreateTag(tag)">{{ tag }}</button>
         </div>
         <input v-model="createForm.statement" class="create-field create-statement" aria-label="自主声明" />
         <button class="create-back-hit" @click="backFromCreate" aria-label="返回"></button>
