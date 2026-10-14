@@ -291,6 +291,7 @@ button { border: 0; cursor: pointer; }
   border-radius: 6px;
   isolation: isolate;
 }
+.detail-side .empty-comments { left: 10.74%; top: 53.8%; width: 78.64%; height: 30%; transform: translateY(1.4vw); }
 .comments-image { width: 100%; height: auto; }
 
 /* 本轮细调：保持右侧内容层原位；左侧画卷与画布保持对称 */
