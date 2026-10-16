@@ -24,8 +24,8 @@ button { border: 0; cursor: pointer; }
   .uploaded-card-title { left: 51.8%; top: 3%; width: 31%; }
   .uploaded-card-title-text { position: absolute; z-index: 3; left: 54.5%; top: 22%; width: 26%; height: 10%; display: grid; place-items: center; overflow: hidden; padding: 0 3%; background: transparent; color: #6a5a48; font-size: clamp(14px, 1.2vw, 24px); font-weight: 600; line-height: 1.25; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
   .uploaded-card-original { left: 52.5%; top: 34%; width: 16%; }
-.uploaded-card-line { left: 51.8%; top: 69%; width: 43%; }
-.uploaded-card-stats { left: 52%; top: 77%; width: 41.5%; }
+  .uploaded-card-line { left: 51.8%; top: 79%; width: 43%; }
+  .uploaded-card-stats { left: 52%; top: 87%; width: 41.5%; }
 .uploaded-work-info { position: absolute; z-index: 2; left: 51.5%; top: 13%; width: 45%; height: 76%; display: flex; flex-direction: column; align-items: flex-start; gap: clamp(4px, .65vw, 10px); padding: 5% 6% 3%; border-radius: 0 12px 12px 0; background: #fffaf0; text-align: left; }
 .uploaded-work-info strong { display: block; width: 100%; overflow: hidden; padding: .3em .25em; border: 1px solid #c8baa1; color: #6a5a48; font-size: clamp(16px, 1.45vw, 28px); font-weight: 600; line-height: 1.25; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
 .uploaded-work-info em { padding: .28em .8em; border: 1px solid #c8baa1; border-radius: 999px; color: #aa9a80; font-size: clamp(11px, .8vw, 16px); font-style: normal; }
