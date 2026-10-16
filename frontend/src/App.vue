@@ -10,6 +10,12 @@ import cardOne from './assets/figma/组件.png'
 import cardTwo from './assets/figma/组件-1.png'
 import cardThree from './assets/figma/组件-2.png'
 import cardFour from './assets/figma/组件-3.png'
+import uploadedCardBase from './assets/figma/uploaded-card-base.png'
+import uploadedCardStats from './assets/figma/uploaded-card-stats.png'
+import uploadedCardLine from './assets/figma/uploaded-card-line.png'
+import uploadedCardTitle from './assets/figma/uploaded-card-title.png'
+import uploadedCardOriginal from './assets/figma/uploaded-card-original.png'
+import uploadedCardViews from './assets/figma/uploaded-card-views.png'
 import galleryBack from './assets/figma/image 238.png'
 import navLandscape from './assets/figma/Group 8.png'
 import navBirds from './assets/figma/Group 6.png'
@@ -294,9 +300,14 @@ onBeforeUnmount(clearSelectedImage)
       <section class="card-grid draggable-part" :style="dragStyle('card-grid')" @pointerdown="startDrag($event, 'card-grid')" aria-label="我的画廊作品">
         <article v-for="work in galleryWorks" :key="work.id || work.title" class="work-card" :class="{ 'uploaded-work-card': work.uploaded }" @click="!workEditMode && openDetail(work)">
           <template v-if="work.uploaded">
-            <img class="uploaded-card-ui" :src="cardOne" alt="作品卡片" />
+            <img class="uploaded-card-ui" :src="uploadedCardBase" alt="作品卡片底板" />
             <img class="uploaded-work-image" :src="work.image" :alt="work.title" />
-            <span class="uploaded-work-info"><strong>{{ work.title }}</strong><em>原创作品</em><small>♡ {{ work.likes }}　评论 {{ work.comments }}</small></span>
+            <img class="uploaded-card-views" :src="uploadedCardViews" alt="浏览量" />
+            <img class="uploaded-card-title" :src="uploadedCardTitle" alt="标题框" />
+            <span class="uploaded-card-title-text">{{ work.title }}</span>
+            <img class="uploaded-card-original" :src="uploadedCardOriginal" alt="原创" />
+            <img class="uploaded-card-line" :src="uploadedCardLine" alt="" />
+            <img class="uploaded-card-stats" :src="uploadedCardStats" alt="互动数据" />
           </template>
           <img v-else class="card-export" :src="work.cardImage" :alt="work.title" />
           <button v-if="workEditMode" class="work-delete" type="button" aria-label="删除作品" @click.stop="deleteWork(work)">×</button>
