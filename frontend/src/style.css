@@ -22,7 +22,7 @@ button { border: 0; cursor: pointer; }
 .uploaded-card-views, .uploaded-card-title, .uploaded-card-original, .uploaded-card-line, .uploaded-card-stats { position: absolute; z-index: 2; height: auto; object-fit: contain; pointer-events: none; }
 .uploaded-card-views { left: 38.5%; top: 4%; width: 9%; }
 .uploaded-card-title { left: 51.8%; top: 12%; width: 31%; }
-.uploaded-card-title-text { position: absolute; z-index: 3; left: 54.5%; top: 24%; width: 26%; height: 10%; display: grid; place-items: center; overflow: hidden; padding: 0 3%; background: #faf3e5; color: #6a5a48; font-size: clamp(14px, 1.2vw, 24px); font-weight: 600; line-height: 1.25; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
+.uploaded-card-title-text { position: absolute; z-index: 3; left: 54.5%; top: 29%; width: 26%; height: 10%; display: grid; place-items: center; overflow: hidden; padding: 0 3%; background: #faf3e5; color: #6a5a48; font-size: clamp(14px, 1.2vw, 24px); font-weight: 600; line-height: 1.25; text-align: center; text-overflow: ellipsis; white-space: nowrap; }
 .uploaded-card-original { left: 52.5%; top: 30%; width: 16%; }
 .uploaded-card-line { left: 51.8%; top: 69%; width: 43%; }
 .uploaded-card-stats { left: 52%; top: 77%; width: 41.5%; }
