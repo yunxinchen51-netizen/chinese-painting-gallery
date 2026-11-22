@@ -284,7 +284,7 @@ onBeforeUnmount(clearSelectedImage)
 
 <template>
   <Transition name="dissolve" mode="out-in">
-    <main v-if="page === 'gallery'" key="gallery" class="figma-page gallery-page" :class="{ 'layout-editing': editMode }" :style="{ backgroundImage: `url(${galleryDesk})` }">
+    <main v-if="page === 'gallery'" key="gallery" class="figma-page gallery-page" :class="{ 'layout-editing': editMode, 'work-editing': workEditMode }" :style="{ backgroundImage: `url(${galleryDesk})` }">
       <button class="gallery-edit-toggle" @click="toggleWorkEditMode">{{ workEditMode ? '完成编辑' : '编辑作品' }}</button>
       <header class="figma-header">
         <div class="brand draggable-part" :style="dragStyle('brand')" @pointerdown="startDrag($event, 'brand')"><img :src="galleryBack" alt="返回" /><strong>我的画廊</strong></div>
